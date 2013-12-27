@@ -70,6 +70,7 @@
 						marker.on('dragend', setHash);
 						setHash();
 						marker.addTo(map);
+						$('#urlwrapper').addClass('visible');
 					}
 				}
 
@@ -77,6 +78,7 @@
 					if (marker) {
 						map.removeLayer(marker);
 						marker = false;
+						$('#urlwrapper').removeClass('visible');
 					}
 				}
 
@@ -86,10 +88,15 @@
 						pos = [
 							(1000*pos.lat).toFixed(0),
 							(1000*pos.lng).toFixed(0)
-						];
-						window.location.hash = pos.join('_');
+						].join('_');
+						window.location.hash = pos;
+						$('#url').val('http://michaelkreil.github.io/30c3-map/#'+pos);
 					}
 				}
+
+				$('#url').on('click', function () {
+					$('#url').select();
+				})
 
 			})
 		</script>
@@ -111,6 +118,21 @@
 				top: 8px;
 				right: 8px;
 			}
+			#urlwrapper {
+				display: none;
+				position: absolute;
+				left:8px;
+				right:8px;
+				bottom:8px;
+				text-align: center;
+			}
+			#urlwrapper.visible {
+				display: block;
+			}
+			#url {
+				width: 100%;
+				max-width: 500px
+			}
 		</style>
 		<meta name="HandheldFriendly" content="True" />
 		<meta name="viewport" content="width=device-width, user-scalable=no">
@@ -122,5 +144,6 @@
 		<div id="map">
 		</div>
 		<div id="marker" class="btn" data-toggle="button"><img src="leaflet/images/marker-icon.png" width="25" height="41" /></div>
+		<div id="urlwrapper"><input type="text" id="url" /></div>
 	</body>
 </html>
