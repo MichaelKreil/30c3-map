@@ -3,10 +3,14 @@
 		<meta charset="utf-8">
 		<title>30C3 map</title>
 		<link rel="stylesheet" type="text/css" media="screen" href="leaflet/leaflet.css">
-		<script type="text/javascript" src="leaflet/leaflet.js"></script>
+		<link rel="stylesheet" type="text/css" media="screen" href="bootstrap/css/bootstrap.min.css">
 		<script type="text/javascript" src="jquery/jquery-2.0.3.min.js"></script>
+		<script type="text/javascript" src="leaflet/leaflet.js"></script>
+		<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 		<script type="text/javascript">
 			$(function () {
+				var marker;
+
 				var map = L.map('map', {
 					minZoom: 0,
 					maxZoom: 6,
@@ -14,11 +18,73 @@
 					center: [0,0],
 					maxBounds: [[-80,-180],[80,180]]
 				});
-				var layer_data = L.tileLayer('tiles/{z}/{x}/{y}.jpg', {
+				
+				L.tileLayer('tiles/{z}/{x}/{y}.jpg', {
 				    attribution: '<a href="https://events.ccc.de/congress/2013/">30C3</a>',
 				    noWrap: true
 				}).addTo(map);
 
+				$('#marker').on('click', function (event) {
+					setTimeout(function () {
+						var button = $(event.currentTarget);
+						if (button.hasClass('active')) {
+							addMarker();
+						} else {
+							removeMarker();
+						}
+					},0);
+				})
+
+				setTimeout(getHash, 0);
+
+				function getHash() {
+					var hash = window.location.hash;
+					if (hash) {
+						hash = hash.match(/([\-0-9]*)_([\-0-9]*)/);
+						if (hash) {
+							var pos = [
+								parseInt(hash[1], 10)/1000,
+								parseInt(hash[2], 10)/1000
+							];
+							addMarker(pos);
+						}
+					}
+				}
+
+				function addMarker(pos) {
+					removeMarker();
+					if (pos) {
+						map.setView(pos, 3);
+						marker = L.marker(pos);
+						marker.addTo(map);
+					} else {
+						marker = L.marker(map.getCenter(), {
+							draggable: true,
+							opacity: 0.7
+						});
+						marker.on('dragend', setHash);
+						setHash();
+						marker.addTo(map);
+					}
+				}
+
+				function removeMarker() {
+					if (marker) {
+						map.removeLayer(marker);
+						marker = false;
+					}
+				}
+
+				function setHash() {
+					if (marker) {
+						var pos = marker.getLatLng();
+						pos = [
+							(1000*pos.lat).toFixed(0),
+							(1000*pos.lng).toFixed(0)
+						];
+						window.location.hash = pos.join('_');
+					}
+				}
 
 			})
 		</script>
@@ -32,6 +98,14 @@
 			#map {
 				background: #fff
 			}
+			#marker {
+				width: 25px;
+				height: 41px;
+				padding: 8px;
+				position: absolute;
+				top: 8px;
+				right: 8px;
+			}
 		</style>
 		<meta name="HandheldFriendly" content="True" />
 		<meta name="viewport" content="width=device-width, user-scalable=no">
@@ -42,5 +116,6 @@
 	<body>
 		<div id="map">
 		</div>
+		<div id="marker" class="btn" data-toggle="button"><img src="leaflet/images/marker-icon.png" width="25" height="41" /></div>
 	</body>
 </html>
