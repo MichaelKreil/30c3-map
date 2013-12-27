@@ -1,0 +1,46 @@
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>30C3 map</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="leaflet/leaflet.css">
+		<script type="text/javascript" src="leaflet/leaflet.js"></script>
+		<script type="text/javascript" src="jquery/jquery-2.0.3.min.js"></script>
+		<script type="text/javascript">
+			$(function () {
+				var map = L.map('map', {
+					minZoom: 0,
+					maxZoom: 6,
+					zoom: 3,
+					center: [0,0],
+					maxBounds: [[-80,-180],[80,180]]
+				});
+				var layer_data = L.tileLayer('tiles/{z}/{x}/{y}.jpg', {
+				    attribution: '<a href="https://events.ccc.de/congress/2013/">30C3</a>',
+				    noWrap: true
+				}).addTo(map);
+
+
+			})
+		</script>
+		<style type="text/css">
+			html, body, #map {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+			}
+			#map {
+				background: #fff
+			}
+		</style>
+		<meta name="HandheldFriendly" content="True" />
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="format-detection" content="telephone=no">
+	</head>
+	<body>
+		<div id="map">
+		</div>
+	</body>
+</html>
