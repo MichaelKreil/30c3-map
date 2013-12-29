@@ -222,7 +222,7 @@
 				})
 
 				var res = $('#result');
-				var search = $('#search');
+				var search = $('#searchtext');
 				function performSearch(){
 					var searchstring = search.val().toLowerCase();
 					var searchresult = Object.keys(things).sort(function(a,b){
@@ -238,7 +238,7 @@
 						else res.hide();
 					if (things[search]){
 							addMarker(things[search]);
-							$('#marker').addClass('active');
+							$('#btnmarker').addClass('active');
 							setHash();
 					}
 					$('#result ul').html(html);
@@ -251,12 +251,12 @@
 
 				function select(text){					
 					addMarker(things[text]);
-					$('#marker').addClass('active');
+					$('#btnmarker').addClass('active');
 					setHash();
 					res.hide();
 				}
 
-				$('#search').keypress(function(e) {
+				$('#searchtext').keypress(function(e) {
 					switch(e.keyCode) {
 						case 13: // Enter
 							var selected = $('#result ul li.selected').first();
@@ -280,7 +280,7 @@
 				    noWrap: true
 				}).addTo(map);
 
-				$('#marker').on('click', function (event) {
+				$('#btnmarker').on('click', function (event) {
 					setTimeout(function () {
 						var button = $(event.currentTarget);
 						if (button.hasClass('active')) {
@@ -303,7 +303,7 @@
 								parseInt(hash[2], 10)/1000
 							];
 							addMarker(pos);
-							$('#marker').addClass('active');
+							$('#btnmarker').addClass('active');
 						}
 					}
 				}
@@ -325,7 +325,7 @@
 						marker.on('dragend', setHash);
 						setHash();
 						marker.addTo(map);
-						$('#url-wrapper').addClass('visible');
+						$('#footer').addClass('visible');
 					}
 				}
 
@@ -333,7 +333,7 @@
 					if (marker) {
 						map.removeLayer(marker);
 						marker = false;
-						$('#url-wrapper').removeClass('visible');
+						$('#footer').removeClass('visible');
 						setHash();
 					}
 				}
@@ -365,52 +365,37 @@
 				margin: 0;
 				padding: 0;
 			}
+
 			#map {
-				background: #fff
-			}
-			#marker {
-				padding: 5px;
 				position: absolute;
-				top: 48px;
-				right: 8px;
+				background: #fff;
+				top: 52px;
 			}
-			#marker-icon {
-				width: 24px;
-				height: 24px;
-				background: url(leaflet/images/marker-icon-red.png) no-repeat;
-				background-position: center;
-				background-size: auto 100%;
-			}
-			.active #marker-icon {
-				background-image: url(leaflet/images/marker-icon-grey.png);
-			}
-			#url-wrapper {
-				display: none;
-				position: absolute;
-				left:8px;
-				right:8px;
-				bottom:8px;
-				text-align: center;
-			}
-			#url-wrapper.visible {
-				display: block;
-			}
-			#url {
-				width: 100%;
-				max-width: 500px
-			}
-				width: 50%;
+
 			#header {
-				margin: 5px auto;
-				border: pink;
-				max-width: 500px
-			}
-
-			#search{
+				padding: 0px;
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				right: 0px;
 				width: 100%;
+				background: #fff;
+				height: 52px;
 			}
 
-			#result{
+			#searchtext {
+				position: absolute;
+				width: auto;
+				height: auto;
+				margin: 0;
+				top: 8px;
+				left: 8px;
+				right: 52px;
+				bottom: 8px;
+				font-size: 16px;
+			}
+
+			#result {
 				display: none;
 				margin: 0;
 				padding: 0;
@@ -435,6 +420,54 @@
 			li.selected {
 				font-weight: bold;
 			}
+			.btn3m {
+				position: absolute;
+				top: 8px;
+				padding: 5px;
+			}
+			#btnsearch {
+				right: 52px;
+			}
+			#btnmarker {
+				right: 8px;
+			}
+			#search-icon {
+				width: 24px;
+				height: 24px;
+				background: url(images/search.png) no-repeat;
+				background-position: center;
+				background-size: auto 100%;
+			}
+			#marker-icon {
+				width: 24px;
+				height: 24px;
+				background: url(images/marker-icon-red.png) no-repeat;
+				background-position: center;
+				background-size: auto 100%;
+			}
+			.active #marker-icon {
+				background-image: url(images/marker-icon-grey.png);
+			}
+			#footer {
+				display: none;
+				position: absolute;
+				left:0px;
+				right:0px;
+				bottom:0px;
+				height:52px;
+				text-align: center;
+				background: rgba(255,255,255,0.8)
+			}
+			#footer.visible {
+				display: block;
+			}
+			#url {
+				margin-top: 8px;
+				width: 100%;
+				max-width: 800px;
+				height:34px;
+				font-size: 16px;
+			}
 
 		</style>
 		<meta name="HandheldFriendly" content="True" />
@@ -446,12 +479,15 @@
 	<body>
 		<div style="display:none">Zoomable map of the 30c3. You can also add a marker and send the deep link to share a meeting point.</div>
 		<div id="header">
-			<input id="search" type="text" />
+			<input id="searchtext" type="text" />
+			<div id="result"><ul></ul></div>
+			<!--
+			<div id="btnsearch" class="btn btn3m" data-toggle="button"><div id="search-icon"></div></div>
+		-->
+			<div id="btnmarker" class="btn btn3m" data-toggle="button"><div id="marker-icon"></div></div>
 		</div>
-		<div id="result"><ul></ul></div>
 		<div id="map">
 		</div>
-		<div id="marker" class="btn" data-toggle="button"><div id="marker-icon"></div></div>
-		<div id="url-wrapper"><input type="text" id="url" /></div>
+		<div id="footer"><input type="text" id="url" /></div>
 	</body>
 </html>
