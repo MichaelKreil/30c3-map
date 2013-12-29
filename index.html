@@ -223,7 +223,7 @@
 
 				var res = $('#result');
 				var search = $('#searchtext');
-				function performSearch(){
+				function performSearch() {
 					var searchstring = search.val().toLowerCase();
 					var searchresult = Object.keys(things).sort(function(a,b){
 						return levDist(searchstring, a.toLowerCase())
@@ -237,19 +237,20 @@
 					if (html != '') res.show();
 						else res.hide();
 					if (things[search]){
-							addMarker(things[search]);
-							$('#btnmarker').addClass('active');
-							setHash();
+						addMarker(things[search]);
+						$('#btnmarker').addClass('active');
+						setHash();
 					}
 					$('#result ul').html(html);
 					$('#result ul li:first').addClass('selected');
 					$('#result ul li').click(function(){select($(this).text())});
-					res.css({top: search.position().top
-								  + search.height() + 10,
-							 left: search.position().left});
+					res.css({
+						top: search.position().top + search.height() + 10,
+						left: search.position().left
+					});
 				}
 
-				function select(text){					
+				function select(text){
 					addMarker(things[text]);
 					$('#btnmarker').addClass('active');
 					setHash();
@@ -257,13 +258,13 @@
 				}
 
 				$('#searchtext').keypress(function(e) {
-					switch(e.keyCode) {
+					switch (e.keyCode) {
 						case 13: // Enter
 							var selected = $('#result ul li.selected').first();
 							if (selected) selected.click();
-							break;
-				        default:
-				        	setTimeout(performSearch, 0);
+						break;
+						default:
+							setTimeout(performSearch, 10);
 					}
 				});
 
