@@ -13,6 +13,8 @@
 		<script type="text/javascript" src="leaflet/leaflet.js"></script>
 		<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 		<script type="text/javascript">
+			var things = {};
+			things['kids'] = [26.981, 27.598];
 			$(function () {
 				var marker;
 				var Icon = L.icon({
@@ -23,6 +25,16 @@
 					shadowSize: [41, 41],
 					shadowUrl: 'leaflet/images/marker-shadow.png'
 				})
+							
+				$('#search').keypress(function() {
+					var search = $(this).val();
+					console.log(search, things[search]);
+					if (things[search]){
+							addMarker(things[search]);
+							$('#marker').addClass('active');
+							setHash();
+					}
+				});
 
 				var map = L.map('map', {
 					minZoom: 0,
@@ -164,6 +176,7 @@
 		<meta name="format-detection" content="telephone=no">
 	</head>
 	<body>
+		<input id="search" type="text" />
 		<div id="map">
 		</div>
 		<div id="marker" class="btn" data-toggle="button"><div id="marker-icon"></div></div>
