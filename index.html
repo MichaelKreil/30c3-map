@@ -325,7 +325,7 @@
 						marker.on('dragend', setHash);
 						setHash();
 						marker.addTo(map);
-						$('#urlwrapper').addClass('visible');
+						$('#url-wrapper').addClass('visible');
 					}
 				}
 
@@ -333,7 +333,7 @@
 					if (marker) {
 						map.removeLayer(marker);
 						marker = false;
-						$('#urlwrapper').removeClass('visible');
+						$('#url-wrapper').removeClass('visible');
 						setHash();
 					}
 				}
@@ -384,7 +384,7 @@
 			.active #marker-icon {
 				background-image: url(leaflet/images/marker-icon-grey.png);
 			}
-			#urlwrapper {
+			#url-wrapper {
 				display: none;
 				position: absolute;
 				left:8px;
@@ -392,15 +392,15 @@
 				bottom:8px;
 				text-align: center;
 			}
-			#urlwrapper.visible {
+			#url-wrapper.visible {
 				display: block;
 			}
 			#url {
 				width: 100%;
 				max-width: 500px
 			}
-			#search-wrapper {
 				width: 50%;
+			#header {
 				margin: 5px auto;
 				border: pink;
 				max-width: 500px
@@ -445,13 +445,13 @@
 	</head>
 	<body>
 		<div style="display:none">Zoomable map of the 30c3. You can also add a marker and send the deep link to share a meeting point.</div>
-		<div id="search-wrapper">
+		<div id="header">
 			<input id="search" type="text" />
 		</div>
 		<div id="result"><ul></ul></div>
 		<div id="map">
 		</div>
 		<div id="marker" class="btn" data-toggle="button"><div id="marker-icon"></div></div>
-		<div id="urlwrapper"><input type="text" id="url" /></div>
+		<div id="url-wrapper"><input type="text" id="url" /></div>
 	</body>
 </html>
