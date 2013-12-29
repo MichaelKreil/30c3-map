@@ -13,6 +13,203 @@
 		<script type="text/javascript" src="leaflet/leaflet.js"></script>
 		<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 		<script type="text/javascript">
+		
+		//some Levenshtein-distnace code
+		//http://www.merriampark.com/ld.htm, http://www.mgilleland.com/ld/ldjavascript.htm, Damerau–Levenshtein distance (Wikipedia)
+			var levDist = function(s, t) {
+			    var d = []; //2d matrix
+
+			    // Step 1
+			    var n = s.length;
+			    var m = t.length;
+
+			    if (n == 0) return m;
+			    if (m == 0) return n;
+
+			    //Create an array of arrays in javascript (a descending loop is quicker)
+			    for (var i = n; i >= 0; i--) d[i] = [];
+
+			    // Step 2
+			    for (var i = n; i >= 0; i--) d[i][0] = i;
+			    for (var j = m; j >= 0; j--) d[0][j] = j;
+
+			    // Step 3
+			    for (var i = 1; i <= n; i++) {
+			        var s_i = s.charAt(i - 1);
+
+			        // Step 4
+			        for (var j = 1; j <= m; j++) {
+
+			            //Check the jagged ld total so far
+			            if (i == j && d[i][j] > 4) return n;
+
+			            var t_j = t.charAt(j - 1);
+			            var cost = (s_i == t_j) ? 0 : 1; // Step 5
+
+			            //Calculate the minimum
+			            var mi = d[i - 1][j] + 1;
+			            var b = d[i][j - 1] + 1;
+			            var c = d[i - 1][j - 1] + cost;
+
+			            if (b < mi) mi = b;
+			            if (c < mi) mi = c;
+
+			            d[i][j] = mi; // Step 6
+
+			            //Damerau transposition
+			            if (i > 1 && j > 1 && s_i == t.charAt(j - 2) && s.charAt(i - 2) == t_j) {
+			                d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + cost);
+			            }
+			        }
+			    }
+
+			    // Step 7
+			    return d[n][m];
+			}
+
+			var things = { '42': [ -24.847, 4.482 ],
+				Coffeenerds: [ 64.091, 63.105 ],
+				'La Quadrature du Net': [ 60.63, 45.791 ],
+				'Quality Alcohol': [ 56.17, -5.098 ],
+				'Villa Straylight': [ 55.628, 11.162 ],
+				'Word-lounge': [ 27.45, -2.549 ],
+				Kids: [ 26.981, 27.51 ],
+				Relax: [ 40.447, 53.965 ],
+				'Hall 17': [ 54.214, 47.373 ],
+				'Hall F': [ 11.006, -60.469 ],
+				'Hall E': [ 1.845, -61.172 ],
+				'Hall D': [ -7.188, -61.084 ],
+				'Food-hacking': [ 2.021, -45.088 ],
+				'Gängeviertel': [ -0.176, -26.279 ],
+				'Hall G': [ 10.833, -26.191 ],
+				'Speakers-corner': [ -8.407, 20.039 ],
+				'Full Circle': [ -6.49, 27.861 ],
+				Chaoswelle: [ 2.899, 46.758 ],
+				Leiwandville: [ -24.847, 4.482 ],
+				'Civic Summit': [ -22.837, 4.395 ],
+				Teckids: [ -22.675, 7.119 ],
+				pyneo: [ -22.269, 9.58 ],
+				irish: [ -22.269, 13.008 ],
+				OSM: [ -22.431, 17.139 ],
+				xenomorphs: [ -24.287, 9.229 ],
+				fabhack: [ -23.725, 15.205 ],
+				AKV: [ -25.245, 12.92 ],
+				DFRi: [ -25.165, 15.996 ],
+				'Modern Poland': [ -27.137, 13.799 ],
+				'Lübeck': [ -27.684, 2.549 ],
+				Freifunk: [ -29.535, 2.549 ],
+				Sendezentrum: [ -33.358, 4.307 ],
+				Lockpicking: [ -33.064, 15.82 ],
+				HacklabKiKa: [ -33.651, 23.643 ],
+				Amsterdam: [ -34.886, 21.006 ],
+				MW: [ -35.102, 25.313 ],
+				Heaven: [ -39.572, 19.6 ],
+				POC: [ -28.382, 29.355 ],
+				'linux call router': [ -31.653, 30.85 ],
+				sigrok: [ -31.728, 34.453 ],
+				C3S: [ -28.15, 37.617 ],
+				'#youbroketheinternet': [ -27.45, 40.078 ],
+				WHS: [ -25.879, 39.639 ],
+				HACAS: [ -24.687, 38.584 ],
+				Cryptoparty: [ -18.813, 36.65 ],
+				I2P: [ -19.311, 39.199 ],
+				EFF: [ -18.062, 41.309 ],
+				EDRi: [ -16.383, 45.527 ],
+				FiFF: [ -16.046, 47.637 ],
+				'Noisy square': [ -18.73, 45.352 ],
+				GSM: [ -15.961, 30.674 ],
+				'Hall 13': [ -14.179, 34.541 ],
+				'Hall 14': [ -11.781, 38.672 ],
+				sublab: [ -55.104, -30.19 ],
+				'Kinky Geeks': [ -56.873, -29.839 ],
+				C3PB: [ -53.982, -26.235 ],
+				Mannheim: [ -55.354, -22.236 ],
+				'Double octo*': [ -54.214, -19.907 ],
+				'WOB Space': [ -54.496, -14.897 ],
+				'Black Space': [ -55.154, -17.402 ],
+				'Aussenstelle 511': [ -54.801, -11.689 ],
+				Milliways: [ -55.204, -8.921 ],
+				'Chaos inkl.': [ -56.729, -26.016 ],
+				Frankfurt: [ -56.487, -22.544 ],
+				'Byte Werk': [ -56.632, -18.237 ],
+				'AA Hacks': [ -56.17, -15.249 ],
+				Geheimorganisation: [ -56.559, -7.119 ],
+				'; DROP TABLE': [ -57.327, -13.623 ],
+				Innovalan: [ -57.16, -6.812 ],
+				Thumb2: [ -57.821, -6.987 ],
+				Maschinenraum: [ -58.517, -9.756 ],
+				'Ball-pit': [ -59.378, -28.345 ],
+				SaturnD: [ -58.379, -22.983 ],
+				MuCCC: [ -58.379, -20.918 ],
+				Starship: [ -58.448, -18.984 ],
+				Bio: [ -58.402, -13.799 ],
+				Rollwerk: [ -59.176, -13.975 ],
+				Chaospot: [ -60.565, -29.399 ],
+				Netz39: [ -61.228, -26.587 ],
+				C302: [ -61.037, -23.994 ],
+				'c-base': [ -60.196, -16.743 ],
+				'3D': [ -61.355, -20.742 ],
+				'Hall 3': [ -61.27, -16.172 ],
+				Copter: [ -60.93, -11.118 ],
+				BlinkenArea: [ -60.196, -7.163 ],
+				Darmstadt: [ -61.939, -29.268 ],
+				'shack space': [ -62.755, -31.685 ],
+				'Binary Kitchen': [ -62.39, -26.895 ],
+				CCCFR: [ -62.083, -23.774 ],
+				Mainframe: [ -62.512, -20.654 ],
+				MFK: [ -62.411, -17.93 ],
+				Foobar: [ -62.329, -14.546 ],
+				Forth: [ -62.329, -10.898 ],
+				compass: [ -63.332, -26.938 ],
+				Warsaw: [ -63.392, -23.159 ],
+				Warpzone: [ -63.588, -18.896 ],
+				'Kölner Kreis': [ -63.253, -15.337 ],
+				'DIY Audio': [ -63.214, -11.294 ],
+				Flipdot: [ -63.957, -32.212 ],
+				Smartcards: [ -63.879, -29.487 ],
+				CONFidence: [ -64.378, -27.026 ],
+				Entropolis: [ -64.225, -20.918 ],
+				'Labor 23': [ -64.321, -13.359 ],
+				Fail0verflow: [ -64.868, -23.027 ],
+				Geraffel: [ -64.091, 13.359 ],
+				'Hacker Tours': [ -64.718, 17.095 ],
+				C4: [ -65.33, 15.469 ],
+				c3le: [ -65.821, -2.241 ],
+				Niwohlos: [ -66.601, 0.176 ],
+				Magarathea: [ -66.653, 5.669 ],
+				Salzburg: [ -66.302, 11.777 ],
+				Chaosdorf: [ -66.302, 14.37 ],
+				Subraum: [ -66.947, -2.461 ],
+				Spline: [ -67.542, -1.362 ],
+				Eindbazen: [ -67.357, 1.362 ],
+				Aachen: [ -67.289, 3.735 ],
+				'/dev/lol': [ -66.878, 10.107 ],
+				Info: [ -63.115, 18.765 ],
+				Food: [ -53.094, 10.986 ],
+				Wardrobe: [ -50.709, 30.103 ],
+				'T-Shirt Sale': [ -52.429, 36.87 ],
+				Speakerregistration: [ -47.04, 54.492 ],
+				'Hall 6': [ -66.018, 43.594 ],
+				'Revolution #9': [ -70.787, 27.949 ],
+				'c-shuttle': [ -69.473, 28.301 ],
+				Exit: [ -61.606, 56.777 ],
+				Entry: [ -53.645, 69.961 ],
+				'Hall 1': [ 12.897, 11.602 ],
+				'Hall 2': [ 21.289, 40.43 ],
+				Crypotcat: [ -18.73, 45.352 ],
+				'Torservers.net': [ -18.73, 45.352 ],
+				'Hart Voor InternetVrijheid': [ -18.73, 45.352 ],
+				Puscii: [ -18.73, 45.352 ],
+				'USE OTR!': [ -18.73, 45.352 ],
+				'Wikileaks-Press': [ -18.73, 45.352 ],
+				'Anarchist Village': [ -18.73, 45.352 ],
+				Greenhost: [ -18.73, 45.352 ],
+				'Tactical Tech': [ -18.73, 45.352 ],
+				'Open Knowledge Foundation': [ -18.73, 45.352 ],
+				'LEAP Encryption Access Project': [ -18.73, 45.352 ],
+				'GlobaLeaks Projekt + Hermes Center': [ -18.73, 45.352 ],
+				Mailpile: [ -18.73, 45.352 ] };
+
 			$(function () {
 				var marker;
 				var Icon = L.icon({
@@ -23,6 +220,52 @@
 					shadowSize: [41, 41],
 					shadowUrl: 'leaflet/images/marker-shadow.png'
 				})
+
+				var res = $('#result');
+				var search = $('#search');
+				function performSearch(){
+					var searchstring = search.val().toLowerCase();
+					var searchresult = Object.keys(things).sort(function(a,b){
+						return levDist(searchstring, a)
+								- levDist(searchstring, b);
+					});
+					var html = '';
+					for (var i = 0; i < Math.min(searchresult.length, 10); i++) {
+						html += '<li>'+searchresult[i]+'</li>';
+					}
+
+					if (html != '') res.show();
+						else res.hide();
+					if (things[search]){
+							addMarker(things[search]);
+							$('#marker').addClass('active');
+							setHash();
+					}
+					$('#result ul').html(html);
+					$('#result ul li:first').addClass('selected');
+					$('#result ul li').click(function(){select($(this).text())});
+					res.css({top: search.position().top
+								  + search.height() + 10,
+							 left: search.position().left});
+				}
+
+				function select(text){					
+					addMarker(things[text]);
+					$('#marker').addClass('active');
+					setHash();
+					res.hide();
+				}
+
+				$('#search').keypress(function(e) {
+					switch(e.keyCode) {
+						case 13: // Enter
+							var selected = $('#result ul li.selected').first();
+							if (selected) selected.click();
+							break;
+				        default:
+				        	setTimeout(performSearch, 0);
+					}
+				});
 
 				var map = L.map('map', {
 					minZoom: 0,
@@ -128,7 +371,7 @@
 			#marker {
 				padding: 5px;
 				position: absolute;
-				top: 8px;
+				top: 48px;
 				right: 8px;
 			}
 			#marker-icon {
@@ -156,6 +399,43 @@
 				width: 100%;
 				max-width: 500px
 			}
+			#search-wrapper {
+				width: 50%;
+				margin: 5px auto;
+				border: pink;
+				max-width: 500px
+			}
+
+			#search{
+				width: 100%;
+			}
+
+			#result{
+				display: none;
+				margin: 0;
+				padding: 0;
+				z-index: 9999;
+				position: absolute;
+				width: 50%;
+				max-width: 494px;
+				border-radius: 5px;
+				border: solid #CCC 2px;
+			}
+
+			#result ul li,
+			#result ul {
+				margin: 0;
+				padding: 0 3px;
+				background-color: #EEE;
+				list-style:none;
+				cursor: pointer;
+				cursor: hand;
+			}
+
+			li.selected {
+				font-weight: bold;
+			}
+
 		</style>
 		<meta name="HandheldFriendly" content="True" />
 		<meta name="viewport" content="width=device-width, user-scalable=no">
@@ -165,6 +445,10 @@
 	</head>
 	<body>
 		<div style="display:none">Zoomable map of the 30c3. You can also add a marker and send the deep link to share a meeting point.</div>
+		<div id="search-wrapper">
+			<input id="search" type="text" />
+		</div>
+		<div id="result"><ul></ul></div>
 		<div id="map">
 		</div>
 		<div id="marker" class="btn" data-toggle="button"><div id="marker-icon"></div></div>
