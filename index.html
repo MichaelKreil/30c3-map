@@ -67,61 +67,148 @@
 			    return d[n][m];
 			}
 
-			var things = {};
-			things['Coffeenerds'] = [64.091,63.105];
-			things['La Quadrature du Net'] = [60.63,45.791];
-			things['Quality Alcohol'] = [56.17,-5.098];
-			things['Villa Straylight'] = [55.628,11.162];
-			things['Word-lounge'] = [27.45,-2.549];
-			things['Kids'] = [26.981,27.51];
-			things['Relax'] = [40.447,53.965];
-			things['Hall 17'] = [54.214,47.373];
-			things['Hall F'] = [11.006,-60.469];
-			things['Hall E'] = [1.845,-61.172];
-			things['Hall D'] = [-7.188,-61.084];
-			things['Food-hacking'] = [2.021,-45.088];
-			things['Gängeviertel'] = [-0.176,-26.279];
-			things['Hall G'] = [10.833,-26.191];
-			things['Speakers-corner'] = [-8.407,20.039];
-			things['Full Circle'] = [-6.49,27.861];
-			things['Chaoswelle'] = [2.899,46.758];
-			things['Leiwandville'] = [-24.847,4.482];
-			things['42'] = [-24.847,4.482];
-			things['Civic Summit'] = [-22.837,4.395];
-			things['Teckids'] = [-22.675,7.119];
-			things['pyneo'] = [-22.269,9.58];
-			things['irish'] = [-22.269,13.008];
-			things['OSM'] = [-22.431,17.139];
-			things['xenomorphs'] = [-24.287,9.229];
-			things['fabhack'] = [-23.725,15.205];
-			things['AKV'] = [-25.245,12.92];
-			things['DFRi'] = [-25.165,15.996];
-			things['Modern Poland'] = [-27.137,13.799];
-			things['LÃ¼beck'] = [-27.684,2.549];
-			things['Freifunk'] = [-29.535,2.549];
-			things['Sendezentrum'] = [-33.358,4.307];
-			things['Lockpicking'] = [-33.064,15.82];
-			things['HacklabKiKa'] = [-33.651,23.643];
-			things['Amsterdam'] = [-34.886,21.006];
-			things['MW'] = [-35.102,25.313];
-			things['Heaven'] = [-39.572,19.6];
-			things['POC'] = [-28.382,29.355];
-			things['linux call router'] = [-31.653,30.85];
-			things['sigrok'] = [-31.728,34.453];
-			things['C3S'] = [-28.15,37.617];
-			things['#youbroketheinternet'] = [-27.45,40.078];
-			things['WHS'] = [-25.879,39.639];
-			things['HACAS'] = [-24.687,38.584];
-			things['Cryptoparty'] = [-18.813,36.65];
-			things['I2P'] = [-19.311,39.199];
-			things['EFF'] = [-18.062,41.309];
-			things['EDRi'] = [-16.383,45.527];
-			things['FiFF'] = [-16.046,47.637];
-			things['Noisy square'] = [-18.73,45.352];
-			things['GSM'] = [-15.961,30.674];
-			things['Hall 13'] = [-14.179,34.541];
-			things['Hall 14'] = [-11.781,38.672];
-			var locations = Object.keys(things);
+			var things = { '42': [ -24.847, 4.482 ],
+				Coffeenerds: [ 64.091, 63.105 ],
+				'La Quadrature du Net': [ 60.63, 45.791 ],
+				'Quality Alcohol': [ 56.17, -5.098 ],
+				'Villa Straylight': [ 55.628, 11.162 ],
+				'Word-lounge': [ 27.45, -2.549 ],
+				Kids: [ 26.981, 27.51 ],
+				Relax: [ 40.447, 53.965 ],
+				'Hall 17': [ 54.214, 47.373 ],
+				'Hall F': [ 11.006, -60.469 ],
+				'Hall E': [ 1.845, -61.172 ],
+				'Hall D': [ -7.188, -61.084 ],
+				'Food-hacking': [ 2.021, -45.088 ],
+				'Gängeviertel': [ -0.176, -26.279 ],
+				'Hall G': [ 10.833, -26.191 ],
+				'Speakers-corner': [ -8.407, 20.039 ],
+				'Full Circle': [ -6.49, 27.861 ],
+				Chaoswelle: [ 2.899, 46.758 ],
+				Leiwandville: [ -24.847, 4.482 ],
+				'Civic Summit': [ -22.837, 4.395 ],
+				Teckids: [ -22.675, 7.119 ],
+				pyneo: [ -22.269, 9.58 ],
+				irish: [ -22.269, 13.008 ],
+				OSM: [ -22.431, 17.139 ],
+				xenomorphs: [ -24.287, 9.229 ],
+				fabhack: [ -23.725, 15.205 ],
+				AKV: [ -25.245, 12.92 ],
+				DFRi: [ -25.165, 15.996 ],
+				'Modern Poland': [ -27.137, 13.799 ],
+				'Lübeck': [ -27.684, 2.549 ],
+				Freifunk: [ -29.535, 2.549 ],
+				Sendezentrum: [ -33.358, 4.307 ],
+				Lockpicking: [ -33.064, 15.82 ],
+				HacklabKiKa: [ -33.651, 23.643 ],
+				Amsterdam: [ -34.886, 21.006 ],
+				MW: [ -35.102, 25.313 ],
+				Heaven: [ -39.572, 19.6 ],
+				POC: [ -28.382, 29.355 ],
+				'linux call router': [ -31.653, 30.85 ],
+				sigrok: [ -31.728, 34.453 ],
+				C3S: [ -28.15, 37.617 ],
+				'#youbroketheinternet': [ -27.45, 40.078 ],
+				WHS: [ -25.879, 39.639 ],
+				HACAS: [ -24.687, 38.584 ],
+				Cryptoparty: [ -18.813, 36.65 ],
+				I2P: [ -19.311, 39.199 ],
+				EFF: [ -18.062, 41.309 ],
+				EDRi: [ -16.383, 45.527 ],
+				FiFF: [ -16.046, 47.637 ],
+				'Noisy square': [ -18.73, 45.352 ],
+				GSM: [ -15.961, 30.674 ],
+				'Hall 13': [ -14.179, 34.541 ],
+				'Hall 14': [ -11.781, 38.672 ],
+				sublab: [ -55.104, -30.19 ],
+				'Kinky Geeks': [ -56.873, -29.839 ],
+				C3PB: [ -53.982, -26.235 ],
+				Mannheim: [ -55.354, -22.236 ],
+				'Double octo*': [ -54.214, -19.907 ],
+				'WOB Space': [ -54.496, -14.897 ],
+				'Black Space': [ -55.154, -17.402 ],
+				'Aussenstelle 511': [ -54.801, -11.689 ],
+				Milliways: [ -55.204, -8.921 ],
+				'Chaos inkl.': [ -56.729, -26.016 ],
+				Frankfurt: [ -56.487, -22.544 ],
+				'Byte Werk': [ -56.632, -18.237 ],
+				'AA Hacks': [ -56.17, -15.249 ],
+				Geheimorganisation: [ -56.559, -7.119 ],
+				'; DROP TABLE': [ -57.327, -13.623 ],
+				Innovalan: [ -57.16, -6.812 ],
+				Thumb2: [ -57.821, -6.987 ],
+				Maschinenraum: [ -58.517, -9.756 ],
+				'Ball-pit': [ -59.378, -28.345 ],
+				SaturnD: [ -58.379, -22.983 ],
+				MuCCC: [ -58.379, -20.918 ],
+				Starship: [ -58.448, -18.984 ],
+				Bio: [ -58.402, -13.799 ],
+				Rollwerk: [ -59.176, -13.975 ],
+				Chaospot: [ -60.565, -29.399 ],
+				Netz39: [ -61.228, -26.587 ],
+				C302: [ -61.037, -23.994 ],
+				'c-base': [ -60.196, -16.743 ],
+				'3D': [ -61.355, -20.742 ],
+				'Hall 3': [ -61.27, -16.172 ],
+				Copter: [ -60.93, -11.118 ],
+				BlinkenArea: [ -60.196, -7.163 ],
+				Darmstadt: [ -61.939, -29.268 ],
+				'shack space': [ -62.755, -31.685 ],
+				'Binary Kitchen': [ -62.39, -26.895 ],
+				CCCFR: [ -62.083, -23.774 ],
+				Mainframe: [ -62.512, -20.654 ],
+				MFK: [ -62.411, -17.93 ],
+				Foobar: [ -62.329, -14.546 ],
+				Forth: [ -62.329, -10.898 ],
+				compass: [ -63.332, -26.938 ],
+				Warsaw: [ -63.392, -23.159 ],
+				Warpzone: [ -63.588, -18.896 ],
+				'Kölner Kreis': [ -63.253, -15.337 ],
+				'DIY Audio': [ -63.214, -11.294 ],
+				Flipdot: [ -63.957, -32.212 ],
+				Smartcards: [ -63.879, -29.487 ],
+				CONFidence: [ -64.378, -27.026 ],
+				Entropolis: [ -64.225, -20.918 ],
+				'Labor 23': [ -64.321, -13.359 ],
+				Fail0verflow: [ -64.868, -23.027 ],
+				Geraffel: [ -64.091, 13.359 ],
+				'Hacker Tours': [ -64.718, 17.095 ],
+				C4: [ -65.33, 15.469 ],
+				c3le: [ -65.821, -2.241 ],
+				Niwohlos: [ -66.601, 0.176 ],
+				Magarathea: [ -66.653, 5.669 ],
+				Salzburg: [ -66.302, 11.777 ],
+				Chaosdorf: [ -66.302, 14.37 ],
+				Subraum: [ -66.947, -2.461 ],
+				Spline: [ -67.542, -1.362 ],
+				Eindbazen: [ -67.357, 1.362 ],
+				Aachen: [ -67.289, 3.735 ],
+				'/dev/lol': [ -66.878, 10.107 ],
+				Info: [ -63.115, 18.765 ],
+				Food: [ -53.094, 10.986 ],
+				Wardrobe: [ -50.709, 30.103 ],
+				'T-Shirt Sale': [ -52.429, 36.87 ],
+				Speakerregistration: [ -47.04, 54.492 ],
+				'Hall 6': [ -66.018, 43.594 ],
+				'Revolution #9': [ -70.787, 27.949 ],
+				'c-shuttle': [ -69.473, 28.301 ],
+				Exit: [ -61.606, 56.777 ],
+				Entry: [ -53.645, 69.961 ],
+				'Hall 1': [ 12.897, 11.602 ],
+				'Hall 2': [ 21.289, 40.43 ],
+				Crypotcat: [ -18.73, 45.352 ],
+				'Torservers.net': [ -18.73, 45.352 ],
+				'Hart Voor InternetVrijheid': [ -18.73, 45.352 ],
+				Puscii: [ -18.73, 45.352 ],
+				'USE OTR!': [ -18.73, 45.352 ],
+				'Wikileaks-Press': [ -18.73, 45.352 ],
+				'Anarchist Village': [ -18.73, 45.352 ],
+				Greenhost: [ -18.73, 45.352 ],
+				'Tactical Tech': [ -18.73, 45.352 ],
+				'Open Knowledge Foundation': [ -18.73, 45.352 ],
+				'LEAP Encryption Access Project': [ -18.73, 45.352 ],
+				'GlobaLeaks Projekt + Hermes Center': [ -18.73, 45.352 ],
+				Mailpile: [ -18.73, 45.352 ] };
 
 			$(function () {
 				var marker;
@@ -138,7 +225,7 @@
 				var search = $('#search');
 				function performSearch(){
 					var searchstring = search.val().toLowerCase();
-					var searchresult = locations.sort(function(a,b){
+					var searchresult = Object.keys(things).sort(function(a,b){
 						return levDist(searchstring, a)
 								- levDist(searchstring, b);
 					});
@@ -176,7 +263,7 @@
 							if (selected) selected.click();
 							break;
 				        default:
-				        	performSearch();
+				        	setTimeout(performSearch, 0);
 					}
 				});
 
