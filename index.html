@@ -226,8 +226,8 @@
 				function performSearch(){
 					var searchstring = search.val().toLowerCase();
 					var searchresult = Object.keys(things).sort(function(a,b){
-						return levDist(searchstring, a)
-								- levDist(searchstring, b);
+						return levDist(searchstring, a.toLowerCase())
+								- levDist(searchstring, b.toLowerCase());
 					});
 					var html = '';
 					for (var i = 0; i < Math.min(searchresult.length, 10); i++) {
